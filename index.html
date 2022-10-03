@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Space Canon</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+
+function search_results() {
+var search_term = document.getElementById('fname').value	
+
+// Clean up
+const myNode = document.getElementById("picture");
+  while (myNode.firstChild) {
+    myNode.removeChild(myNode.lastChild);
+  }
+
+var url = "https://images-api.nasa.gov/search?q=" + search_term + '&media_type=image';
+
+var xhr = new XMLHttpRequest();
+xhr.open("GET", url, true);
+const image_url_list = []
+const description_list = []
+
+xhr.onreadystatechange = function () {
+	
+   if (xhr.readyState === 4) {
+      resp_json = xhr.responseText;
+      var json = JSON.parse(resp_json);
+      var items = json.collection.items;
+      list_size = 20;
+      var picdiv = document.getElementById("picture");
+      var small_items = items.slice(0, list_size)
+      for (i=0; i < small_items.length; i++) {
+    	  itm = small_items[i];
+    	  item_nasa_id = itm.data[0].nasa_id;;
+    	  image_url_list.push(item_nasa_id);
+    	  item_description = itm.data[0].title;
+    	  description_list.push(item_description);
+    	  thumbnail_pic = itm.links[0].href;
+    	  console.log(thumbnail_pic); 
+    	  var elem = document.createElement('div');
+		  elem.id = item_nasa_id;
+		  elem.title = item_description;
+		  elem.addEventListener("dblclick", myScript);  
+		  //document.body.appendChild(elem);
+		  picdiv.appendChild(elem);
+		  tmpImage = new Image();
+		  tmpImage.src = thumbnail_pic;
+		  document.getElementById(item_nasa_id).append(tmpImage);
+    	  
+      }  
+      var search_form = document.getElementById("search_form");
+      var action_form = document.getElementById("action_form");
+      var results_area = document.getElementById("results_area");
+      results_area.innerHTML="<p><b>Please double click to select image</b></p>";
+	  text_node = document.createTextNode("Please double click to select image\n");
+   }};
+
+xhr.send();
+
+}
+
+function myScript(e) {
+	var caller = e.target || e.srcElement;
+    console.log( caller );
+    location.href = "make_picture.html?pic_url=" + caller.src;
+}
+
+</script>
+
+<meta charset="ISO-8859-1">
+<title>Space Canon</title>
+</head>
+<body>
+
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Space Canon</a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a
+					href="https://www.artsteps.com/view/63387d55e79cef42c0d78e49">Virtual
+						Gallery</a></li>
+				<li><a href="technical_info.html">Technical Info</a></li>
+				<li><a href="help.html">Help</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div id="action_form">
+		<div id="search_form" class="form-group">
+			<form action="">
+				<label for="fname">Search NASA image library</label> <input
+					type="text" id="fname" name="fname"> <input type="button"
+					id="searchbtn" value="Search" onclick="search_results()">
+			</form>
+		</div>
+		<div id="results_area">
+			<p>&nbsp;</p>
+		</div>
+
+	</div>
+	<div id="picture">
+		<p></p>
+
+	</div>
+
+</body>
+</html>

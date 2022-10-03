@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Space Canon</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="https://www.artsteps.com/view/63387d55e79cef42c0d78e49">Virtual Gallery</a></li>
+      <li class="active"><a href="technical_info.html">Technical Info</a></li>
+      <li><a href="help.html">Help</a></li>
+    </ul>
+  </div>
+</nav>
+  
+<div class="container">
+  <p>This application uses an HTML/Javascript front end that communicates with the NASA 
+  image library via the NASA APIs and also communicates with a Python Flask back end 
+  hosted on a GCP Ubuntu Linux VM. The Flask back end communicates with the Stable 
+  Diffusion API. At this point, we're not aware of any APIs that allow a web-based client
+  to communicate directly with the Stable Diffusion API, so it had to work like this.  
+  </p>
+  <p>
+  The Flask back end is running on port 5000, so a rule had to be added for the firewall to 
+  accept tcp traffic on port 5000. We also start it with this command "flask run --host=0.0.0.0" 
+  to make it visible. Using the "nohup" option can help it run in the background if the user 
+  gets logged off. Since the information that's getting sent to the server contains a key,
+  we're using POST rather than GET. (We should also have a certificate installed and be
+  sending it securely, but this was a weekend.)
+  </p>
+  <p>Our project page is at <a 
+  href="https://2022.spaceappschallenge.org/challenges/2022-challenges/art-worlds/teams/space-canon/project">
+  https://2022.spaceappschallenge.org/challenges/2022-challenges/art-worlds/teams/space-canon/project</a> 
+  and our Github repo is at <a href="https://github.com/wayward710/SpaceCanon">
+  https://github.com/wayward710/SpaceCanon</a>. Questions can be directed to wayward710@gmail.com.
+</div>
+
+</body>
+</html>

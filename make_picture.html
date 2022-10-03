@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Space Canon Picture</title>
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	
+
+<script type="text/javascript">
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const pic_url = urlParams.get('pic_url')
+var new_url = pic_url.replace('thumb', 'orig')
+
+function get_pic() {
+	console.log(new_url)
+	tmpImage = new Image();
+	tmpImage.src = pic_url;
+	var picdiv = document.getElementById("picture");
+	picdiv.append(tmpImage);
+}
+
+function handle_submit() {
+	var apikey = document.getElementById("key").value;
+	var prompt = document.getElementById("prompt").value;
+	console.log(apikey);
+	console.log(prompt);
+	var data = { 'key': apikey, 'prompt': prompt, 'url': new_url };
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://34.68.47.35:5000', true);
+    xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var res = xhr.response;
+            console.log(res);
+            location.href = "make_picture.html?pic_url=" + res
+        }
+    };
+
+    xhr.send(JSON.stringify(data));
+    return false;
+	
+	  //xhr.onload = () => alert(xhr.response);
+}
+
+</script>
+</head>
+<body onload="get_pic()">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">Space Canon</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="index.html">Home</a></li>
+      <li><a href="https://www.artsteps.com/view/63387d55e79cef42c0d78e49">Virtual Gallery</a></li>
+      <li><a href="technical_info.html">Technical Info</a></li>
+      <li><a href="https://2022.spaceappschallenge.org/challenges/2022-challenges/art-worlds/teams/space-canon/project">Space Apps Challenge Page</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <form name = "ds_job">
+    <div class="form-group">
+      <label for="exampleInputEmail1">What would you like to do with the image (prompt)?</label>
+      <input type="text" class="form-control" id="prompt" aria-describedby="emailHelp" placeholder="">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Stable Diffusion API KEY</label>
+      <input type="text" class="form-control" id="key" placeholder="API KEY">
+    </div><br>
+    <button type="button" class="btn btn-primary" onclick="handle_submit()">Submit</button>
+  </form>
+	<div id="picture">
+	</div>
+</div>	
+</body>
+</html>
